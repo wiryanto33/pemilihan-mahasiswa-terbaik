@@ -6,6 +6,7 @@ use App\Models\MahasiswaSemester;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 // Endroid QR Code v6
 use Endroid\QrCode\Builder\Builder;
@@ -56,5 +57,25 @@ class CetakPengesahanController extends Controller
             Str::slug($ms->mahasiswa->name ?? 'Mahasiswa') . '.pdf';
 
         return $pdf->stream($filename);
+    }
+
+    public function verifikasiPengesahan(Request $request, MahasiswaSemester $mahasiswaSemester)
+    {
+        $token = (string) $request->query('token');
+
+        $expectedToken = sha1($mahasiswaSemester->getKey() . 'sttal');
+
+        if (empty($token) || !hash_equals($expectedToken, $token)) {
+            abort(404);
+        }
+
+        $ms = $mahasiswaSemester->load(['mahasiswa.programStudy', 'semester']);
+
+        $verifiedAt = Carbon::now('Asia/Jakarta')->locale('id');
+
+        return view('verifikasi.pengesahan', [
+            'ms'         => $ms,
+            'verifiedAt' => $verifiedAt,
+        ]);
     }
 }

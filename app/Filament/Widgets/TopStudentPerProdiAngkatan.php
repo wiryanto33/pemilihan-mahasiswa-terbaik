@@ -156,11 +156,11 @@ class TopStudentPerProdiAngkatan extends BaseWidget
     protected function getTableActions(): array
     {
         return [
-            Tables\Actions\Action::make('detail')
-                ->label('Detail')
-                ->icon('heroicon-o-eye')
-                ->url(fn($record) => route('filament.admin.resources.mahasiswa-semesters.edit', $record))
-                ->openUrlInNewTab(),
+            // Tables\Actions\Action::make('detail')
+            //     ->label('Detail')
+            //     ->icon('heroicon-o-eye')
+            //     ->url(fn($record) => route('filament.admin.resources.mahasiswa-semesters.edit', $record))
+            //     ->openUrlInNewTab(),
 
             Tables\Actions\Action::make('download_pengesahan')
                 ->label('Download Pengesahan')

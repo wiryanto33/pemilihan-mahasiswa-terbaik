@@ -24,3 +24,8 @@ Route::get(
     '/mahasiswa-semesters/{mahasiswaSemester}/pengesahan.pdf',
     [CetakPengesahanController::class, 'pengesahan']
 )->name('ms.pengesahan');
+
+Route::get(
+    '/verifikasi/pengesahan/{mahasiswaSemester}',
+    [CetakPengesahanController::class, 'verifikasiPengesahan']
+)->name('ms.pengesahan.verify');
