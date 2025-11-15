@@ -9,6 +9,7 @@ use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,8 @@ use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerifyEmail
+
+class User extends Authenticatable implements FilamentUser, HasAvatar //MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles, TwoFactorAuthenticatable, HasApiTokens;
@@ -27,6 +29,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
      * @var array<int, string>
      */
     protected $fillable = [
+        'program_study_id',
         'name',
         'email',
         'password',
@@ -82,5 +85,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    public function programStudy(): BelongsTo
+    {
+        return $this->belongsTo(ProgramStudy::class);
     }
 }

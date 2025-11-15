@@ -17,8 +17,9 @@ class ManageSetting extends SettingsPage
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
 
     protected static string $settings = KaidoSetting::class;
-
+    
     protected static ?string $navigationGroup = 'Settings';
+
 
     public function form(Form $form): Form
     {

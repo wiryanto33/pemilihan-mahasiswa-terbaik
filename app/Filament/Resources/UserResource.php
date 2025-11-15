@@ -37,13 +37,19 @@ class UserResource extends Resource
                 Section::make(
                     'User Information'
                 )->schema([
-                            TextInput::make('name')
-                                ->required(),
-                            TextInput::make('email')
-                                ->required(),
-                            TextInput::make('password')
-                                ->required(),
-                        ]),
+                    TextInput::make('name')
+                        ->required(),
+                    Select::make('program_study_id')
+                        ->label('Program Studi')
+                        ->placeholder('Pilih Program Studi hanya untuk User Prodi')
+                        ->relationship('programStudy', 'code')
+                        ->searchable()
+                        ->preload(),
+                    TextInput::make('email')
+                        ->required(),
+                    TextInput::make('password')
+                        ->required(),
+                ]),
             ]);
     }
 

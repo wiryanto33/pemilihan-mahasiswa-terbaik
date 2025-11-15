@@ -3,6 +3,17 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Login;
+use App\Filament\Widgets\DashboardOverview;
+use App\Filament\Widgets\MahasiswaByProdiChart;
+use App\Filament\Widgets\MahasiswaOverviewStats;
+use App\Filament\Widgets\PhysicalTestOverview;
+use App\Filament\Widgets\PhysicalTestSemesterChart;
+use App\Filament\Widgets\PhysicalTestStats;
+use App\Filament\Widgets\RecentPhysicalTests;
+use App\Filament\Widgets\TopMahasiswasWidget;
+use App\Filament\Widgets\TopStudentPerProdi;
+use App\Filament\Widgets\TopStudentPerProdiAngkatan;
+use App\Filament\Widgets\TopStudentStats;
 use App\Models\User;
 use App\Settings\KaidoSetting;
 use Filament\Http\Middleware\Authenticate;
@@ -12,6 +23,8 @@ use DutchCodingCompany\FilamentSocialite\Provider;
 use Filament\Forms\Components\FileUpload;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -94,7 +107,28 @@ class AdminPanelProvider extends PanelProvider
             ->plugins(
                 $this->getPlugins()
             )
+            ->widgets([
+                TopStudentPerProdiAngkatan::class,
+                PhysicalTestStats::class,
+            ])
             ->databaseNotifications();
+        // ->navigation(
+        //     function (NavigationBuilder $nav) {
+        //         return $nav->groups([
+        //             // urutan grup yang kamu inginkan
+        //             NavigationGroup::make()->label('Dashboard'),
+        //             NavigationGroup::make()->label('Books'),              // contoh
+        //             NavigationGroup::make()->label('User'),
+        //             NavigationGroup::make()->label('Prodi'),
+        //             NavigationGroup::make()->label('Korsis'),
+        //             NavigationGroup::make()->label('Kadep Pers'),
+        //             NavigationGroup::make()->label('Kadep Akademik'),
+        //             NavigationGroup::make()->label('Filament Shield'),
+        //             NavigationGroup::make()->label('Settings'),           // ⬅️ taruh TERAKHIR
+        //         ]);
+        //     }
+        // );
+
     }
 
     private function getPlugins(): array
