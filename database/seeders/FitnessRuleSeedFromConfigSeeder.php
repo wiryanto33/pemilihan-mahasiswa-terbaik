@@ -10,8 +10,6 @@ use App\Models\{
     FitnessAgeBracket,
     FitnessMetric,
     FitnessThreshold,
-    FitnessPostureBmiParam,
-    FitnessPostureCategory
 };
 
 class FitnessRuleSeedFromConfigSeeder extends Seeder

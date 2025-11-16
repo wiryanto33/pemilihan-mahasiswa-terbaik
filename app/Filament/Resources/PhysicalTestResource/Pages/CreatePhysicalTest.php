@@ -43,13 +43,11 @@ class CreatePhysicalTest extends CreateRecord
         }
 
         // =========================
-        // 2) Postur (NP)
+        // 2) Postur (NP) - manual
         // =========================
-        $height = isset($data['height_cm']) ? (float) $data['height_cm'] : null;
-        $weight = isset($data['weight_kg']) ? (float) $data['weight_kg'] : null;
-        $data['posture_score'] = ($height && $weight)
-            ? PhysicalScoring::scorePosture($height, $weight)
-            : null;
+        if (isset($data['posture_score']) && $data['posture_score'] !== null) {
+            $data['posture_score'] = (float) $data['posture_score'];
+        }
 
         // =========================
         // 3) Lari 12 menit (NA)

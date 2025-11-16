@@ -7,8 +7,6 @@ use App\Models\{
     FitnessAgeBracket,
     FitnessMetric,
     FitnessThreshold,
-    FitnessPostureBmiParam,
-    FitnessPostureCategory
 };
 
 class PhysicalScoring
@@ -78,28 +76,9 @@ class PhysicalScoring
 
     public static function scorePosture(?float $heightCm, ?float $weightKg): ?float
     {
-        if (!$heightCm || !$weightKg) return null;
-
-        // DB first
-        if ($rule = self::activeRule()) {
-            if ($param = $rule->postureBmi) {
-                $bmi   = self::bmi($heightCm, $weightKg);
-                $delta = abs($bmi - (float)$param->ideal);
-                $score = (float)$param->base_score - ($delta * (float)$param->scale_per_point);
-                $score = max((float)$param->min_score, min((float)$param->max_score, round($score, 2)));
-                return $score;
-            }
-            // jika pakai kategori
-            if ($rule->postureCategories()->exists()) {
-                $bmi = self::bmi($heightCm, $weightKg);
-                $cat = self::bmiCategoryToJuklak($bmi); // mapping sama seperti sebelumnya
-                $row = $rule->postureCategories()->where('category_key', $cat)->first();
-                if ($row) return (float)$row->score;
-            }
-        }
-
-        // fallback config
-        return self::scorePosture_config($heightCm, $weightKg);
+        // Perhitungan postur dinonaktifkan.
+        // Nilai NP diinput manual pada form Physical Test.
+        return null;
     }
 
     protected static function bmiCategoryToJuklak(float $bmi): string
@@ -366,5 +345,4 @@ class PhysicalScoring
         return self::scoreByMaxThreshold($sec, $br['table'] ?? [], 'max_sec');
     }
 }
-
 

@@ -17,14 +17,8 @@ class FitnessRuleSet extends Model
     {
         return $this->hasMany(FitnessMetric::class, 'rule_set_id');
     }
-    public function postureBmi()
-    {
-        return $this->hasOne(FitnessPostureBmiParam::class, 'rule_set_id');
-    }
-    public function postureCategories()
-    {
-        return $this->hasMany(FitnessPostureCategory::class, 'rule_set_id');
-    }
+
+ 
     // add guaded
     protected $guarded = ['id'];
     // add hidden

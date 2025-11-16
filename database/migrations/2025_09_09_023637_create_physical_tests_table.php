@@ -27,7 +27,7 @@ return new class extends Migration
 
             // Garjas B (1 menit masing2) + shuttle run
             //pria
-            $t->unsignedSmallInteger('pull_up')->nullable();     
+            $t->unsignedSmallInteger('pull_up')->nullable();
             $t->unsignedSmallInteger('sit_up')->nullable();         // / modified
             $t->unsignedSmallInteger('push_up')->nullable();        // / modified
             $t->decimal('shuttle_run_sec', 5, 2)->nullable();

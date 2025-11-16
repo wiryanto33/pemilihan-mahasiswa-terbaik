@@ -33,12 +33,10 @@ class EditPhysicalTest extends EditRecord
             }
         }
 
-        // 2) Postur (NP)
-        $height = $data['height_cm'] ?? null;
-        $weight = $data['weight_kg'] ?? null;
-        $data['posture_score'] = ($height && $weight)
-            ? PhysicalScoring::scorePosture((float) $height, (float) $weight)
-            : null;
+        // 2) Postur (NP) - manual
+        if (isset($data['posture_score']) && $data['posture_score'] !== null) {
+            $data['posture_score'] = (float) $data['posture_score'];
+        }
 
         // 3) Lari 12 menit (NA)
         $na = null;

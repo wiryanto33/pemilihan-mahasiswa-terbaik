@@ -21,6 +21,7 @@ use App\Support\Juklak\PhysicalScoring;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Components\DatePicker;
+use Illuminate\Validation\Rules\Unique;
 
 class PhysicalTestResource extends Resource
 {
@@ -60,7 +61,14 @@ class PhysicalTestResource extends Resource
 
                             Forms\Components\Select::make('semester_id')
                                 ->relationship('semester', 'code')
-                                ->required(),
+                                ->required()
+                                ->unique(
+                                    table: PhysicalTest::class,
+                                    column: 'semester_id',
+                                    ignoreRecord: true,
+                                    modifyRuleUsing: fn (Unique $rule, Get $get) => $rule
+                                        ->where('mahasiswa_id', $get('mahasiswa_id')),
+                                ),
 
                             // Hidden field untuk menyimpan gender sementara
                             Forms\Components\Hidden::make('temp_gender'),
@@ -108,23 +116,21 @@ class PhysicalTestResource extends Resource
                             Forms\Components\TextInput::make('height_cm')
                                 ->label('Tinggi (cm)')
                                 ->numeric()
-                                ->minValue(100)->maxValue(230)
-                                ->live()
-                                ->afterStateUpdated(fn(Set $set, Get $get) => self::recalcFromRaw($set, $get)),
+                                ->minValue(100)->maxValue(230),
+                            // ->live()
+                            // ->afterStateUpdated(fn(Set $set, Get $get) => self::recalcFromRaw($set, $get)),
 
                             Forms\Components\TextInput::make('weight_kg')
                                 ->label('Berat (kg)')
                                 ->numeric()
-                                ->minValue(35)->maxValue(180)
-                                ->live()
-                                ->afterStateUpdated(fn(Set $set, Get $get) => self::recalcFromRaw($set, $get)),
+                                ->minValue(35)->maxValue(180),
+                            // ->live()
+                            // ->afterStateUpdated(fn(Set $set, Get $get) => self::recalcFromRaw($set, $get)),
 
                             Forms\Components\TextInput::make('posture_score')
                                 ->label('Nilai Postur (NP)')
                                 ->helperText('Masukkan nilai hasil konversi tabel postur Juklak (0–100).')
                                 ->numeric()->minValue(0)->maxValue(100)
-                                ->readOnly()
-                                ->dehydrated(),
                         ]),
                     ]),
 
@@ -314,13 +320,11 @@ class PhysicalTestResource extends Resource
         }
 
         // ========== 1) Postur (NP) ==========
-        $np = null;
-        $h = $get('height_cm');
-        $w = $get('weight_kg');
-        if ($h && $w) {
-            $np = \App\Support\Juklak\PhysicalScoring::scorePosture((float)$h, (float)$w);
-            $set('posture_score', $np);
-        }
+        // Nilai postur diinput manual oleh user,
+        // tidak lagi dihitung otomatis dari tinggi & berat.
+        $np = $get('posture_score') !== null
+            ? (float) $get('posture_score')
+            : null;
 
         // ========== 2) Lari 12 menit (NA) — RAW PRIORITY ==========
         $na = null;
