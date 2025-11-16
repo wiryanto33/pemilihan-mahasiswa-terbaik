@@ -26,7 +26,7 @@ class FitnessThresholdResource extends Resource
                 ->schema([
                     Forms\Components\Select::make('age_bracket_id')
                         ->label('Age Bracket')
-                        ->relationship('bracket', 'id', fn($q) => $q->with('ruleSet'))
+                        ->relationship('bracket', 'id', fn($query) => $query->with('ruleSet'))
                         ->getOptionLabelFromRecordUsing(fn(FitnessAgeBracket $r) =>
                         "{$r->ruleSet?->name} | " . ($r->gender === 'male' ? 'Pria' : 'Wanita') . " {$r->age_min}-{$r->age_max}")
                         ->searchable()
@@ -34,7 +34,7 @@ class FitnessThresholdResource extends Resource
                         ->required(),
                     Forms\Components\Select::make('metric_id')
                         ->label('Metric')
-                        ->relationship('metric', 'key', fn($q) => $q->with('ruleSet'))
+                        ->relationship('metric', 'key', fn($query) => $query->with('ruleSet'))
                         ->getOptionLabelFromRecordUsing(fn(FitnessMetric $m) =>
                         "{$m->ruleSet?->name} | {$m->key} " . ($m->direction ? "({$m->direction})" : ''))
                         ->searchable()
