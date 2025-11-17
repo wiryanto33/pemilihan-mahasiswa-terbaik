@@ -65,6 +65,8 @@ class AdminPanelProvider extends PanelProvider
 
     public function panel(Panel $panel): Panel
     {
+        $settings = $this->settings;
+
         return $panel
             ->default()
             ->id('admin')
@@ -73,6 +75,19 @@ class AdminPanelProvider extends PanelProvider
             ->when($this->settings->registration_enabled ?? true, fn($panel) => $panel->registration())
             ->when($this->settings->password_reset_enabled ?? true, fn($panel) => $panel->passwordReset())
             ->emailVerification()
+            ->brandName($settings?->site_name ?? config('app.name'))
+            ->brandLogoHeight('7rem')
+            ->brandLogo(function () use ($settings) {
+                if (! request()->routeIs('filament.admin.auth.login', 'filament.admin.auth.register')) {
+                    return null;
+                }
+
+                if (! $settings?->auth_logo_path) {
+                    return null;
+                }
+
+                return asset('storage/' . $settings->auth_logo_path);
+            })
             ->colors([
                 'primary' => Color::Amber,
             ])
