@@ -22,6 +22,8 @@ class MatakuliahResource extends Resource
     protected static ?string $navigationGroup = 'Prodi';
 
     protected static ?string $navigationLabel = 'Matakuliah';
+    protected static ?string $modelLabel = 'Matakuliah';
+    protected static ?string $pluralModelLabel = 'Matakuliah';
 
     public static function form(Form $form): Form
     {

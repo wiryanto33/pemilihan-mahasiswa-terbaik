@@ -16,6 +16,8 @@ class FitnessMetricResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-flag';
     protected static ?string $navigationGroup = 'Aturan Garjas';
     protected static ?string $navigationLabel = 'Pembandingan';
+    protected static ?string $modelLabel = 'Pembandingan';
+    protected static ?string $pluralModelLabel = 'Pembandingan';
     protected static ?int $navigationSort = 30;
 
     public static function form(Form $form): Form

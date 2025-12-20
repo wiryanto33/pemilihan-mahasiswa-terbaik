@@ -16,6 +16,8 @@ class FitnessAgeBracketResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationGroup = 'Aturan Garjas';
     protected static ?string $navigationLabel = 'Rentang Usia';
+    protected static ?string $modelLabel = 'Rentang Usia';
+    protected static ?string $pluralModelLabel = 'Usia';
     protected static ?int $navigationSort = 20;
 
     public static function form(Form $form): Form

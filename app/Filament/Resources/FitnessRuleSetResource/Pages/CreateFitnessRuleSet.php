@@ -8,4 +8,5 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateFitnessRuleSet extends CreateRecord
 {
     protected static string $resource = FitnessRuleSetResource::class;
+    protected static ?string $title = 'Buat Aturan Garjas';
 }

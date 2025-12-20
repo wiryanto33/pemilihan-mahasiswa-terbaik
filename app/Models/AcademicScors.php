@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AcademicScors extends Model
 {
+    // protected static ?string $label = 'Nilai Akademik';
+
+    // protected static ?string $pluralLabel = 'Nilai Akademik';
+
     protected $fillable = [
         'mahasiswa_id',
         'matakuliah_id',

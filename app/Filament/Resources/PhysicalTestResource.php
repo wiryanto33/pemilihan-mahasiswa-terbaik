@@ -31,6 +31,9 @@ class PhysicalTestResource extends Resource
 
     protected static ?string $navigationGroup = 'Kadep Pers';
     protected static ?string $navigationLabel = 'Nilai Garjas Mahasiswa';
+    protected static ?string $modelLabel = 'Nilai Garjas Mahasiswa';
+    protected static ?string $pluralModelLabel = 'Nilai Garjas';
+
 
     public static function form(Form $form): Form
     {

@@ -25,6 +25,8 @@ class AcademicScorsResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-star';
     protected static ?string $navigationGroup = 'Prodi';
     protected static ?string $navigationLabel = 'Nilai Akademik';
+    protected static ?string $modelLabel = 'Nilai Akademik';
+    protected static ?string $pluralModelLabel = 'Nilai Akademik';
 
     public static function form(Form $form): Form
     {

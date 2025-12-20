@@ -20,6 +20,9 @@ class MahasiswaResource extends Resource
     protected static ?string $navigationIcon = 'fas-user-graduate';
 
     protected static ?string $navigationGroup = 'Prodi';
+    protected static ?string $navigationLabel = 'Mahasiswa';
+    protected static ?string $modelLabel = 'Mahasiswa';
+    protected static ?string $pluralModelLabel = 'Mahasiswa';
 
     public static function form(Form $form): Form
     {
@@ -49,7 +52,7 @@ class MahasiswaResource extends Resource
                     ->preload()
                     ->searchable()
                     ->getOptionLabelFromRecordUsing(fn($record) => "{$record->level} - {$record->name}"),
-                    
+
                 Forms\Components\TextInput::make('nrp')
                     ->required()
                     ->maxLength(255),

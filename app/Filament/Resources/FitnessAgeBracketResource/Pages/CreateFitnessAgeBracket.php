@@ -9,7 +9,8 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateFitnessAgeBracket extends CreateRecord
 {
     protected static string $resource = FitnessAgeBracketResource::class;
-    protected static bool $canCreateAnother = false;
+    protected static bool $canCreateAnother = true;
+    protected static ?string $title = 'Buat Rentang Usia';
 
     //customize redirect after create
     public function getRedirectUrl(): string

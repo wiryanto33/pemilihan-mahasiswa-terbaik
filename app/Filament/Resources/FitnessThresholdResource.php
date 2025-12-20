@@ -17,6 +17,8 @@ class FitnessThresholdResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
     protected static ?string $navigationGroup = 'Aturan Garjas';
     protected static ?string $navigationLabel = 'Tabel Nilai Garjas';
+    protected static ?string $modelLabel = 'Tabel Nilai Garjas';
+    protected static ?string $pluralModelLabel = 'Tabel Nilai Garjas';
     protected static ?int $navigationSort = 40;
 
     public static function form(Form $form): Form
@@ -25,7 +27,7 @@ class FitnessThresholdResource extends Resource
             Forms\Components\Section::make('Konteks')
                 ->schema([
                     Forms\Components\Select::make('age_bracket_id')
-                        ->label('Age Bracket')
+                        ->label('Rentang Usia')
                         ->relationship('bracket', 'id', fn($query) => $query->with('ruleSet'))
                         ->getOptionLabelFromRecordUsing(fn(FitnessAgeBracket $r) =>
                         "{$r->ruleSet?->name} | " . ($r->gender === 'male' ? 'Pria' : 'Wanita') . " {$r->age_min}-{$r->age_max}")

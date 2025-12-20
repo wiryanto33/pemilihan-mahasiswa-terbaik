@@ -21,6 +21,10 @@ class ProgramStudyResource extends Resource
 
     protected static ?string $navigationGroup = 'Kadep Akademik';
 
+    protected static ?string $navigationLabel = 'Program Studi';
+    protected static ?string $modelLabel = 'Program Studi';
+    protected static ?string $pluralModelLabel = 'Program Studi';
+
     public static function form(Form $form): Form
     {
         return $form

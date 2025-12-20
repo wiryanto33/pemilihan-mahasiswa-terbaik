@@ -16,6 +16,8 @@ class FitnessRuleSetResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-adjustments-horizontal';
     protected static ?string $navigationGroup = 'Aturan Garjas';
     protected static ?string $navigationLabel = 'Pedoman Aturan';
+    protected static ?string $modelLabel = 'Pedoman Aturan';
+    protected static ?string $pluralModelLabel = 'Pedoman Aturan';
     protected static ?int $navigationSort = 10;
 
     public static function form(Form $form): Form

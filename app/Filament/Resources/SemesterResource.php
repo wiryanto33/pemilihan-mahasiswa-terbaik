@@ -6,6 +6,7 @@ use App\Filament\Resources\SemesterResource\Pages;
 use App\Filament\Resources\SemesterResource\RelationManagers;
 use App\Models\Semester;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -21,17 +22,23 @@ class SemesterResource extends Resource
 
     protected static ?string $navigationGroup = 'Kadep Akademik';
 
+    protected static ?string $navigationLabel = 'Kalender Studi';
+    protected static ?string $modelLabel = 'Kalender Studi';
+    protected static ?string $pluralModelLabel = 'Kalender Studi';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('code')
                     ->required()
+                    ->placeholder('ex: Ganjil-2023')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('year')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('term')
+                Select::make('term')
+                    ->options(['1' => 'Ganjil', '2' => 'Genap'])
                     ->required(),
                 Forms\Components\DatePicker::make('start_date'),
                 Forms\Components\DatePicker::make('end_date'),
@@ -67,7 +74,7 @@ class SemesterResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-   Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make(),
 
             ])
             ->bulkActions([

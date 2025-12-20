@@ -24,6 +24,8 @@ class MahasiswaSemesterResource extends Resource
     protected static ?string $navigationGroup = 'Kadep Akademik';
 
     protected static ?string $navigationLabel = 'Rekap Nilai Mahasiswa';
+    protected static ?string $modelLabel = 'Rekap Nilai Mahasiswa';
+    protected static ?string $pluralModelLabel = 'Rekap Nilai Mahasiswa Per Semester';
 
     public static function form(Form $form): Form
     {

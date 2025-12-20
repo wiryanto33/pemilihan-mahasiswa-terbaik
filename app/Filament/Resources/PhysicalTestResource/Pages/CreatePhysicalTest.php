@@ -12,6 +12,9 @@ class CreatePhysicalTest extends CreateRecord
 {
     protected static string $resource = PhysicalTestResource::class;
     protected static bool $canCreateAnother = false;
+    protected static ?string $title = 'Buat nilai Samapta';
+
+
 
     public function getRedirectUrl(): string
     {
