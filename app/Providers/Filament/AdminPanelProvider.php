@@ -119,30 +119,27 @@ class AdminPanelProvider extends PanelProvider
             ->middleware([
                 SetTheme::class
             ])
+            ->navigationGroups([
+                'Kadep Akademik',
+                'Prodi',
+                'Korsis',
+                'Kadep Pers',
+                'TOEFL',
+                'Aturan Garjas',
+                'Filament Shield',
+                'Settings',
+                'User'
+
+            ])
             ->plugins(
                 $this->getPlugins()
             )
             ->widgets([
                 TopStudentPerProdiAngkatan::class,
                 PhysicalTestStats::class,
+                \App\Filament\Widgets\TopStudentPerLevelChart::class,
             ])
             ->databaseNotifications();
-        // ->navigation(
-        //     function (NavigationBuilder $nav) {
-        //         return $nav->groups([
-        //             // urutan grup yang kamu inginkan
-        //             NavigationGroup::make()->label('Dashboard'),
-        //             NavigationGroup::make()->label('Books'),              // contoh
-        //             NavigationGroup::make()->label('User'),
-        //             NavigationGroup::make()->label('Prodi'),
-        //             NavigationGroup::make()->label('Korsis'),
-        //             NavigationGroup::make()->label('Kadep Pers'),
-        //             NavigationGroup::make()->label('Kadep Akademik'),
-        //             NavigationGroup::make()->label('Filament Shield'),
-        //             NavigationGroup::make()->label('Settings'),           // ⬅️ taruh TERAKHIR
-        //         ]);
-        //     }
-        // );
 
     }
 

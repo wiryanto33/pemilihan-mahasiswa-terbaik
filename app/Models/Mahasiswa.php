@@ -44,6 +44,10 @@ class Mahasiswa extends Model
     {
         return $this->hasMany(MahasiswaSemester::class);
     }
+    public function toeflScores(): HasMany
+    {
+        return $this->hasMany(ToeflScore::class);
+    }
     // add guaded
     protected $guarded = ['id'];
     // add hidden

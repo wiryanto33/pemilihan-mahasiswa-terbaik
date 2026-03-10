@@ -22,5 +22,6 @@ class ProgramStudySeeder extends Seeder
         ProgramStudy::updateOrCreate(['code' => 'S1-HO'], ['name' => 'Teknik Hidrooseanografi ', 'level' => 'S1']);
         ProgramStudy::updateOrCreate(['code' => 'S1-TMI'], ['name' => 'Teknik Management Industri ', 'level' => 'S1']);
         ProgramStudy::updateOrCreate(['code' => 'S2-ASRO'], ['name' => 'Analisis Sistem Riset dan Operasi ', 'level' => 'S2']);
+        ProgramStudy::updateOrCreate(['code' => 'S2-HO'], ['name' => 'Teknik Hidrooseanografi (S2) ', 'level' => 'S2']);
     }
 }

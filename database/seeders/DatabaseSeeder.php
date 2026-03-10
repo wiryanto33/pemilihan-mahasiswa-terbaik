@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,23 +12,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
-
+        // User default
         User::factory()->create([
-            'name' => 'admin',
+            'name'  => 'admin',
             'email' => 'admin@admin.com',
         ]);
 
-
-        //call BookSeeder
-        $this->call(
-            [
-                ProgramStudySeeder::class,
-                SemesterSeeder::class,
-                MatakuliahSeeder::class,
-                MahasiswaSeeder::class,
-                ScoreSeeder::class,
-            ]
-        );
+        // Seeder berurutan (dependency order)
+        $this->call([
+            ShieldSeeder::class,            // Permission & Roles
+            ProgramStudySeeder::class,      // Prodi (D3/S1/S2)
+            SemesterSeeder::class,          // 6 semester (2022-Ganjil s/d 2025-Genap)
+            FitnessRuleSeedFromConfigSeeder::class, // Aturan fitness jasmani
+            MatakuliahSeeder::class,        // MK per prodi per semester
+            MahasiswaSeeder::class,         // Mahasiswa D3 & S1
+            ScoreSeeder::class,             // Nilai: akademik, kepribadian, jasmani, rekap
+        ]);
     }
 }

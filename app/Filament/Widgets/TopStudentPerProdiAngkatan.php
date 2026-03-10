@@ -18,9 +18,22 @@ class TopStudentPerProdiAngkatan extends BaseWidget
 
     protected function getTableQuery(): Builder|Relation|null
     {
-        // Subquery: ambil NA maksimum per (program_study_id, angkatan)
+        $settings = app(\App\Settings\AcademicSetting::class);
+        $d3 = $settings->min_toefl_d3;
+        $s1 = $settings->min_toefl_s1;
+        $s2 = $settings->min_toefl_s2;
+
+        // Subquery: ambil NA maksimum per (program_study_id, angkatan) 
+        // dengan syarat telah lulus TOEFL
         $sub = MahasiswaSemester::query()
             ->join('mahasiswas as m', 'm.id', '=', 'mahasiswa_semesters.mahasiswa_id')
+            ->join('program_studies as ps', 'ps.id', '=', 'm.program_study_id')
+            ->join('toefl_scores as ts', 'ts.mahasiswa_id', '=', 'm.id')
+            ->whereRaw("
+                (ps.level = 'D3' AND ts.score >= ?) OR
+                (ps.level = 'S1' AND ts.score >= ?) OR
+                (ps.level = 'S2' AND ts.score >= ?)
+            ", [$d3, $s1, $s2])
             ->selectRaw('m.program_study_id, m.angkatan, MAX(mahasiswa_semesters.na) as max_na')
             ->groupBy('m.program_study_id', 'm.angkatan');
 
@@ -34,7 +47,16 @@ class TopStudentPerProdiAngkatan extends BaseWidget
                     ->on('t.angkatan', '=', 'm.angkatan')
                     ->on('t.max_na', '=', 'mahasiswa_semesters.na');
             })
+            // Pastikan kita juga filter lagi di base agar yang ditampilin benar-benar yang lulus TOEFL
+            ->join('program_studies as ps', 'ps.id', '=', 'm.program_study_id')
+            ->join('toefl_scores as ts', 'ts.mahasiswa_id', '=', 'm.id')
+            ->whereRaw("
+                (ps.level = 'D3' AND ts.score >= ?) OR
+                (ps.level = 'S1' AND ts.score >= ?) OR
+                (ps.level = 'S2' AND ts.score >= ?)
+            ", [$d3, $s1, $s2])
             ->select('mahasiswa_semesters.*', 'm.angkatan', 'm.program_study_id')
+            ->distinct()
             ->orderBy('m.program_study_id')
             ->orderByDesc('mahasiswa_semesters.na')
             ->orderByDesc('mahasiswa_semesters.updated_at')
