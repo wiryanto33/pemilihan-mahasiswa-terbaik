@@ -46,6 +46,8 @@ class ManageSetting extends SettingsPage
                         ->disk('public')
                         ->directory('auth')
                         ->imagePreviewHeight('100'),
+                    TextInput::make('auth_app_name')
+                        ->label('App Name (Displayed on Login)'),
                     FileUpload::make('auth_background_path')
                         ->label('Background Login & Register')
                         ->image()

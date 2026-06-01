@@ -16,6 +16,7 @@ class KaidoSetting extends Settings
     public bool $sso_enabled;
 
     public ?string $auth_logo_path = null;
+    public ?string $auth_app_name = null;
     public ?string $auth_background_path = null;
     public int $auth_card_opacity = 90;
 

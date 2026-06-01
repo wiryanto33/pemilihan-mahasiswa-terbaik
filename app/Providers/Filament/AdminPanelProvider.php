@@ -82,11 +82,17 @@ class AdminPanelProvider extends PanelProvider
                     return null;
                 }
 
-                if (! $settings?->auth_logo_path) {
+                $logoPath = $settings?->auth_logo_path;
+                $appName = $settings?->auth_app_name;
+
+                if (! $logoPath && ! $appName) {
                     return null;
                 }
 
-                return asset('storage/' . $settings->auth_logo_path);
+                return view('filament.logo', [
+                    'logoPath' => $logoPath,
+                    'appName' => $appName,
+                ]);
             })
             ->colors([
                 'primary' => Color::Amber,
