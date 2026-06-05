@@ -297,12 +297,20 @@ class AcademicScorsResource extends Resource
             ->query(function () {
                 $user = auth()->user();
 
+                $subLatest = DB::table('mahasiswa_semesters as ms1')
+                    ->select('ms1.mahasiswa_id', 'ms1.na')
+                    ->whereRaw('ms1.id = (SELECT MAX(ms2.id) FROM mahasiswa_semesters as ms2 WHERE ms2.mahasiswa_id = ms1.mahasiswa_id)');
+
                 return Mahasiswa::query()
                     ->with('programStudy')
+                    ->leftJoinSub($subLatest, 'latest_semester', function ($join) {
+                        $join->on('mahasiswas.id', '=', 'latest_semester.mahasiswa_id');
+                    })
+                    ->select('mahasiswas.*', 'latest_semester.na as latest_na')
                     ->when(
-                        // semua role selain super_admin disaring per prodi
                         !$user?->hasRole('super_admin'),
                         fn($q) => $q->where('program_study_id', $user?->program_study_id)
+                            ->orderByDesc('latest_semester.na')
                     );
             })
             ->columns([
@@ -318,6 +326,10 @@ class AcademicScorsResource extends Resource
                     ->label('Program Studi')
                     ->sortable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('latest_na')
+                    ->label('Nilai Akhir')
+                    ->sortable()
+                    ->formatStateUsing(fn($state) => $state !== null ? number_format((float)$state, 2) : '-'),
             ])
             ->actions([
                 Tables\Actions\Action::make('detail')
