@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 
 class MahasiswaSemesterResource extends Resource
 {
@@ -51,7 +52,33 @@ class MahasiswaSemesterResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(function (Tables\Contracts\HasTable $livewire) {
+                $user = auth()->user();
+
+                $semesterId = $livewire->tableFilters['semester_id']['value'] ?? null;
+
+                $subLatest = DB::table('mahasiswa_semesters as ms1')
+                    ->selectRaw('ms1.mahasiswa_id, MAX(ms1.id) as max_id')
+                    ->when($semesterId, fn($q) => $q->where('ms1.semester_id', $semesterId))
+                    ->groupBy('ms1.mahasiswa_id');
+
+                return MahasiswaSemester::query()
+                    ->with(['mahasiswa.programStudy', 'semester'])
+                    ->joinSub($subLatest, 'latest', function ($join) {
+                        $join->on('mahasiswa_semesters.id', '=', 'latest.max_id');
+                    })
+                    ->when(
+                        !$user?->hasRole('super_admin'),
+                        fn($q) => $q->whereHas('mahasiswa', fn($m) => $m->where('program_study_id', $user->program_study_id))
+                    );
+            })
+            ->defaultSort('na', 'desc')
             ->columns([
+                Tables\Columns\TextColumn::make('index')
+                    ->label('Peringkat')
+                    ->rowIndex()
+                    ->alignCenter()
+                    ->weight('bold'),
                 Tables\Columns\TextColumn::make('mahasiswa.name')
                     ->numeric()
                     ->searchable()
@@ -111,12 +138,46 @@ class MahasiswaSemesterResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('semester_id')
+                    ->label('Semester')
+                    ->options(fn() => \App\Models\Semester::query()->orderByDesc('code')->pluck('code', 'id'))
+                    ->query(function (Builder $q, $data) {
+                        // Handled in base query to correctly join latest
+                    }),
+                Tables\Filters\SelectFilter::make('angkatan')
+                    ->label('Angkatan')
+                    ->options(fn() => \App\Models\Mahasiswa::query()
+                        ->whereNotNull('angkatan')
+                        ->distinct()
+                        ->orderByDesc('angkatan')
+                        ->pluck('angkatan', 'angkatan'))
+                    ->query(function (Builder $q, $data) {
+                        if ($data['value'] ?? null) {
+                            $q->whereHas('mahasiswa', fn($m) => $m->where('angkatan', $data['value']));
+                        }
+                    }),
             ])
             ->actions([
+                Tables\Actions\Action::make('detail')
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Rekap Nilai Mahasiswa Per Semester')
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Tutup')
+                    ->modalWidth('5xl')
+                    ->modalContent(fn($record) => view(
+                        'filament.tables.mahasiswa-semester-detail-modal',
+                        [
+                            'mahasiswa' => $record->mahasiswa,
+                            'semesters' => \App\Models\MahasiswaSemester::with('semester')
+                                ->where('mahasiswa_id', $record->mahasiswa_id)
+                                ->orderByDesc('semester_id')
+                                ->get(),
+                        ]
+                    )),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-
+                Tables\Actions\DeleteAction::make()
+                    ->requiresConfirmation(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
