@@ -68,7 +68,7 @@ class MahasiswaSemesterResource extends Resource
                         $join->on('mahasiswa_semesters.id', '=', 'latest.max_id');
                     })
                     ->when(
-                        !$user?->hasRole('super_admin'),
+                        !$user?->hasRole('super_admin') && $user?->program_study_id,
                         fn($q) => $q->whereHas('mahasiswa', fn($m) => $m->where('program_study_id', $user->program_study_id))
                     );
             })
